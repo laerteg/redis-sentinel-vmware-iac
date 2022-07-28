@@ -1,0 +1,16 @@
+[Unit]
+Description=Sentinel for Redis
+After=network.target
+
+[Service]
+Type=notify
+LimitNOFILE=64000
+User=redis
+Group=redis
+PIDFile=/opt/redis/run/sentinel.pid
+ExecStart=/usr/sbin/redis-sentinel /opt/redis/conf/sentinel.conf
+ExecStop=/bin/kill -s TERM $MAINPID
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

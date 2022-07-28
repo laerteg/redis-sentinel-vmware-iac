@@ -1,0 +1,6 @@
+catalog_item    = "[TAMBORE] Suse Linux Enterprise 15 - SP1"
+catalog_id      = "adbf8a34-0b83-4856-81b5-567e94855f44"
+catalog_os      = "Linux"
+#catalog_network = "Tn-PROD|APP-PROD|EPG-OPER-BE-019-TB"
+catalog_new_network = "Sim"
+datacenter      = "Tambore"

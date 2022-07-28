@@ -1,0 +1,12 @@
+app_reason      = "Provisionamento de servidores para o Cluster REDIS"
+app_description = "Cluster REDIS"
+app_name        = "autorizador-cartao-node"
+app_type        = "BE"
+app_tag         = "APP"
+app_nodes       = 1
+app_env         = "PROD"
+app_pass        = "Root#1234"
+app_team        = "Matrix"
+app_email       = "l-fintech-matrix@fintech.com"
+app_flavor      = "c1large"
+count_server    = 2

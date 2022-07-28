@@ -1,0 +1,9 @@
+.terraform*
+*terraform.tfstate*
+*.retry
+*.pyc
+/**/*.zip
+!/ansible/**/*.zip
+/venv/
+*.vault_pass
+*.log

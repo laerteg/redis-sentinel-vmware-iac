@@ -1,0 +1,28 @@
+---
+- hosts: all
+  vars:
+    mymaster_ip: 10.181.26.109
+    quorum_num: '3'
+    newrelic_key: '01234567890abcdef245e8cea4b910508d2ce5d67890'
+    env: 'prod'
+    persist_data: 'no'
+  become: yes
+  remote_user: fin_lgiraldelli
+  # gather_facts: no
+  roles:
+    - { role: pre-install, tags: ["pre_install_role"]}
+    - { role: install-redis, tags: ["install_redis_role"]}
+    - { role: install-monitor-tools, tags: ["install_monitor_tools_role"]}
+
+- hosts: redis-master
+  become: yes
+  user: fin_lgiraldelli
+  roles:
+    - { role: start-redis-services, tags: ["start_redis_services_role"]}
+
+- hosts: redis-slave
+  become: yes
+  user: fin_lgiraldelli
+  roles:
+    - { role: start-redis-services, tags: ["start_redis_services_role"]}
+  

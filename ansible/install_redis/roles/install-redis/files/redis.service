@@ -1,0 +1,16 @@
+[Unit]
+Description=Redis In-Memory Data Store
+After=network.target
+
+[Service]
+Type=notify
+LimitNOFILE=64000
+User=redis
+Group=redis
+ExecStart=/usr/sbin/redis-server /opt/redis/conf/redis.conf
+ExecStop=/usr/bin/redis-cli -h 127.0.0.1 shutdown
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+

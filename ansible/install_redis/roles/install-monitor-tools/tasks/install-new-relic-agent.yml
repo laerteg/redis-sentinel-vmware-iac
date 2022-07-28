@@ -1,0 +1,31 @@
+- name: Template a "redis.conf file into place
+  template:
+    src: newrelic-infra.yml.j2
+    dest: /etc/newrelic-infra.yml
+    backup: yes
+- name: Get GPG Key
+  command: /usr/bin/rpm --import https://download.newrelic.com/infrastructure_agent/gpg/newrelic-infra.gpg
+- name: Add newrelic-infra repo
+  command: curl -o /etc/zypp/repos.d/newrelic-infra.repo https://download.newrelic.com/infrastructure_agent/linux/zypp/sles/12.4/x86_64/newrelic-infra.repo
+- name: Instalando New Relic Module for SO
+  zypper:
+    name: newrelic-infra
+    update_cache: yes
+    state: latest
+- name: Instalando New Relic Module for Redis
+  zypper:
+    name: nri-redis
+    update_cache: yes
+    state: latest
+- name: Remove docker-config sample file
+  file:
+    path: /etc/newrelic-infra/integrations.d/docker-config.yml
+    state: absent
+- name: Template redis-config.yml
+  template:
+    src: redis-config.yml.j2
+    dest: /etc/newrelic-infra/integrations.d/redis-config.yml
+- name: Enable and Start newrelic-infra service
+  service:
+    name: newrelic-infra
+    state: restarted

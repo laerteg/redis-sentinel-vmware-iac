@@ -1,0 +1,3 @@
+---
+# tasks file for start-redis-services
+- include: start-redis-services.yml

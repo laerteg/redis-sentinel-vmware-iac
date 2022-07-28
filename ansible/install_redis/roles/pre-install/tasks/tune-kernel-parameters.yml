@@ -1,0 +1,51 @@
+- name: Disable THP support (causes latency and mem usage issues with redis)
+  shell: echo "never" >> /sys/kernel/mm/transparent_hugepage/enabled
+  args:
+    executable: /bin/bash
+- name: Set kernel parameters for Redis Performance 1
+  sysctl:
+    name: vm.min_free_kbytes
+    value: 1448
+    state: present
+- name: Set kernel parameters for Redis Performance 2
+  sysctl:
+    name: vm.overcommit_memory
+    value: 1
+    state: present
+- name: Set kernel parameters for Redis Performance 3
+  sysctl:
+    name: net.core.somaxconn
+    value: 65365
+    state: present
+    reload: yes
+- name: Add or modify nofile soft limit for the user redis
+  pam_limits:
+    domain: redis
+    limit_type: soft
+    limit_item: nofile
+    value: 24576
+- name: Add or modify nofile hard limit for the user redis
+  pam_limits:
+    domain: redis
+    limit_type: hard
+    limit_item: nofile
+    value: 32768
+- name: Add or modify nofile soft limit for the user redis
+  pam_limits:
+    domain: '*'
+    limit_type: soft
+    limit_item: nofile
+    value: 24576
+- name: Add or modify nofile hard limit for the user redis
+  pam_limits:
+    domain: '*'
+    limit_type: hard
+    limit_item: nofile
+    value: 32768
+- name: Copy a after.local file into /etc/init.d, It disable THP after boot
+  copy:
+    src: after.local
+    dest: /etc/init.d/after.local
+    owner: root
+    group: root
+    mode: '0744'

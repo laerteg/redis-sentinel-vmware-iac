@@ -1,0 +1,4 @@
+---
+# tasks file for install-monitor-tools
+# Install New Relic Agent
+- include: install-new-relic-agent.yml

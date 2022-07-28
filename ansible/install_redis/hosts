@@ -1,0 +1,23 @@
+# This is the default ansible 'hosts' file.
+#
+# It should live in /etc/ansible/hosts
+#
+#   - Comments begin with the '#' character
+#   - Blank lines are ignored
+#   - Groups of hosts are delimited by [header] elements
+#   - You can enter hostnames or ip addresses
+#   - A hostname/ip can be a member of multiple groups
+# Ex 1: Ungrouped hosts, specify before any group headers.
+# Ex 2: A collection of hosts belonging to the 'webservers' group
+
+# Os HOSTS range 10.181.x.x são Datacenter A e range 10.182.x.x datacenter B
+# Executamos primeiro para a VM que será o MASTER inicial, depois descomentamos
+# os hosts redis-slave para o Ansible configurar os SLAVES.
+
+[redis-master]
+10.181.26.109
+
+#[redis-slave]
+#10.181.26.110
+#10.182.15.108
+#10.182.15.109

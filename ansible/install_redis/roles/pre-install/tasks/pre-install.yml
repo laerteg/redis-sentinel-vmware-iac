@@ -1,0 +1,31 @@
+- name: Ensure group "redis" exists
+  group:
+    name: redis
+    state: present
+  register: create_group_redis
+- name: Ensure account "redis" exists
+  user:
+    name: redis 
+    comment: User for redis service
+    shell: /sbin/nologin
+    group: redis
+    groups: redis
+    system: True
+    state: present
+    home: /opt/redis
+  register: create_user_redis
+- name: Create Redis Directories
+  file: 
+    path: "{{ item }}"
+    state: directory
+    owner: redis
+    group: redis
+    mode: '0755'
+  with_items:
+    - /opt/redis
+    - /opt/redis/conf
+    - /opt/redis/lib
+    - /opt/redis/log
+    - /opt/redis/run
+  register: create_redis_directories
+  

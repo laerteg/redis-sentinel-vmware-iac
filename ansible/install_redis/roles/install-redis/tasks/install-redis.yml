@@ -1,0 +1,58 @@
+- name: Adicionando Zypper Repository
+  zypper_repository:
+    name: server_database
+    repo: 'https://download.opensuse.org/repositories/server:database/SLE_15_SP1/'
+    disable_gpg_check: yes
+    state: present
+- name: Instalando Redis
+  zypper:
+    name: redis
+    update_cache: no
+    state: latest
+- name: Copy a "redis.service file into place, backing up the original if it differs from the copied version
+  copy:
+    src: redis.service
+    dest: /etc/systemd/system/redis.service
+    mode: '0644'
+    backup: yes
+- name: Copy a "sentinel.service file into place, backing up the original if it differs from the copied version
+  copy:
+    src: sentinel.service
+    dest: /etc/systemd/system/sentinel.service
+    mode: '0644'
+    backup: yes
+- name: Template a "redis.conf file into place
+  template:
+    src: redis.conf.j2
+    dest: /opt/redis/conf/redis.conf
+    owner: redis
+    group: redis
+    mode: '0644'
+    backup: yes
+  register: copy_redis_conf
+- name: Template a "sentinel.conf file into place
+  template:
+    src: sentinel.conf.j2
+    dest: /opt/redis/conf/sentinel.conf
+    owner: redis
+    group: redis
+    mode: '0644'
+    backup: yes
+  register: copy_sentinel_conf
+- name: Add slaveof config when slave nodes
+  lineinfile:
+    path: /opt/redis/conf/redis.conf
+    insertafter: EOF
+    line: 'slaveof {{ mymaster_ip }} 6379'
+  when: ansible_default_ipv4.address != mymaster_ip
+- name: enable data persistence
+  lineinfile:
+    path: /opt/redis/conf/redis.conf
+    regexp: '{{item.From}}'
+    line: '{{item.To}}'
+    state: present        
+  with_items:
+    - { From: '#save 900 1', To: 'save 900 1'}
+    - { From: '#save 300 10', To: 'save 300 10'}
+    - { From: '#save 60 10000', To: 'save 60 10000'}
+  when: persist_data == 'yes'

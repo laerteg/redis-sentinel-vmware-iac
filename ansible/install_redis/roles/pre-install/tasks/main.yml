@@ -1,0 +1,8 @@
+---
+# tasks file for pre-install
+
+# Include pre-install routines
+- include: pre-install.yml
+
+# Include Tune Kernel Parameters routines
+- include: tune-kernel-parameters.yml

@@ -1,0 +1,10 @@
+- name: Enable and Start service redis
+  service:
+    name: redis
+    state: started
+    enabled: yes
+- name: Enable and Start service sentinel
+  service:
+    name: sentinel
+    state: started
+    enabled: yes
